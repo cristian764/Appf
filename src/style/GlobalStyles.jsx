@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
+
 export const placeholderColor = '#AAAAAA'; 
+
 const globalStyles = StyleSheet.create({
   contenedor: {
     flex: 1,
@@ -20,6 +22,7 @@ const globalStyles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#03DAC655',
   },
+
   texto: {
     fontSize: 16,
     color: '#B0B0B0',
@@ -27,6 +30,7 @@ const globalStyles = StyleSheet.create({
     paddingHorizontal: 10,
     lineHeight: 22,
   },
+
   error: {
     color: '#CF6679',
     marginTop: 20,
@@ -62,6 +66,7 @@ const globalStyles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 4,
   },
+
   imagenFoco: {
     width: 140,
     height: 140,
@@ -78,9 +83,11 @@ const globalStyles = StyleSheet.create({
     marginTop: 15,
     alignItems: 'center',
   },
+
   espacioBotones: {
     marginVertical: 12,
   },
+
   botonPrimario: {
     backgroundColor: '#03DAC6',
     paddingVertical: 14,
@@ -89,6 +96,7 @@ const globalStyles = StyleSheet.create({
     marginVertical: 8,
     width: '100%',
   },
+
   textoBoton: {
     color: '#121212',
     fontSize: 16,
@@ -101,6 +109,7 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+
   inputCompacto: {
     height: 44,
     marginBottom: 15,
@@ -109,13 +118,34 @@ const globalStyles = StyleSheet.create({
   header: {
     backgroundColor: '#1E1E1E',
   },
+
   headerTitle: {
     color: '#03DAC6',
     fontSize: 20,
     fontWeight: 'bold',
   },
+
   headerBackButton: {
     color: '#03DAC6',
+  },
+
+  imagenesArriba: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+
+  imagenesAbajo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+
+  imagen: {
+    width: 120,
+    height: 120,
+    marginHorizontal: 10,
+    resizeMode: 'contain',
   },
 });
 

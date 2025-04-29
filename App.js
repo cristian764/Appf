@@ -5,6 +5,7 @@ import PaginaPrincipal from './src/screens/PaginaPrincipal';
 import ConfiguracionWiFi from './src/screens/ConfiguracionWiFi';
 import ControlFoco from './src/screens/ControlFoco';
 import InicioSesion from './src/screens/InicioSesion';
+import Tanque from './src/screens/Tanque';
 import { ESP32IpProvider } from './src/context/ESP32IpContext';
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ export default function App() {
           <Stack.Screen name="PaginaPrincipal" component={PaginaPrincipal} />
           <Stack.Screen name="ConfiguracionWiFi" component={ConfiguracionWiFi} />
           <Stack.Screen name="ControlFoco" component={ControlFoco} />
+          <Stack.Screen name="Tanque" component={Tanque} />
         </Stack.Navigator>
       </NavigationContainer>
     </ESP32IpProvider>

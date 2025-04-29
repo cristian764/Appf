@@ -12,14 +12,25 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "platforms": ["ios", "android"],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.enciendefoco",
+        "supportsTablet": true,
+        "infoPlist": {
+          "NSAppTransportSecurity": {
+            "NSAllowsArbitraryLoads": true,
+            "NSAllowsArbitraryLoadsInWebContent": true
+        }
+      }
     },
     "android": {
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "usesCleartextTraffic": true,  
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
+      }
+    },
       "package": "com.kevir03.FocoApp"
     },
     "web": {
@@ -33,5 +44,6 @@
         "projectId": "f800afe9-225f-439f-adbc-50b172f32289"
       }
     }
+    
   }
-}
+

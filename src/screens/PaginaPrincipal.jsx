@@ -53,6 +53,15 @@ const PaginaPrincipal = () => {
       >
         <Text style={globalStyles.textoBoton}>Controlar foco</Text>
       </TouchableOpacity>
+
+      <View style={globalStyles.espacioBotones} />
+
+      <TouchableOpacity 
+        style={globalStyles.botonPrimario}
+        onPress={() => navigation.navigate('Tanque')}
+      >
+        <Text style={globalStyles.textoBoton}>Tanque de agua</Text>
+      </TouchableOpacity>
     </View>
     </SafeAreaView>
   );
