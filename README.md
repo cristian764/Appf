@@ -38,3 +38,7 @@ expo-secure-store
 expo-network
 → Permite obtener información de red, como el estado de conexión o IP.
 
+Comentarios del maestro
+    # Muy bien si funciona correctamente
+
+    # Falta diseño a su aplicacion
