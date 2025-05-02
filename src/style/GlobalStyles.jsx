@@ -147,6 +147,34 @@ const globalStyles = StyleSheet.create({
     marginHorizontal: 10,
     resizeMode: 'contain',
   },
+
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#121212',
+    padding: 25,
+    justifyContent: 'center',
+  },
+  
+  modalTitulo: {
+    fontSize: 24,
+    color: '#03DAC6',
+    fontWeight: 'bold',
+    marginBottom: 25,
+    textAlign: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#03DAC655',
+    paddingBottom: 12,
+  },
+  
+  modalBotones: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    gap: 10, 
+  },
+  
 });
+
+
 
 export default globalStyles;

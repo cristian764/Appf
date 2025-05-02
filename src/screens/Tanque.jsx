@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import globalStyles from '../style/GlobalStyles';
 import { ESP32IpContext } from '../context/ESP32IpContext';
 import * as SecureStore from 'expo-secure-store';
-import { useNavigation } from '@react-navigation/native';
 
 const imagenesTanque = [
   require('../../assets/imagenes/c1.jpg'),
@@ -22,36 +21,48 @@ const Tanque = () => {
   const [humedad, setHumedad] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [nuevaAltura, setNuevaAltura] = useState('');
+  const [nuevoRadio, setNuevoRadio] = useState('');
 
   const API_BASE_URL = `http://${esp32Ip}:8080`;
 
-  const fetchStatus = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/status`);
-      if (!response.ok) throw new Error('Error al obtener datos del sensor');
-      const data = await response.json();
+  const fetchStatus = () => {
+    fetch(`${API_BASE_URL}/status`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Error al obtener datos del sensor');
+        return response.json();
+      })
+      .then((data) => {
+        setTemperatura(data.temperatura);
+        setHumedad(data.humedad);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message || 'Error de conexión');
+      });
+  };
 
-      const distancia = data.distancia;
-      const temp = data.temperatura;
-      const hum = data.humedad;
-
-      if (distancia > altura) {
-        setNivelAgua(0);
-      } else {
+  const fetchNivelAgua = () => {
+    fetch(`${API_BASE_URL}/nivelAgua`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Error al obtener nivel de agua');
+        return response.json();
+      })
+      .then((data) => {
+        const distancia = data.distancia;
         const nivel = altura - distancia;
         setNivelAgua(nivel < 0 ? 0 : nivel);
-      }
-
-      setTemperatura(temp);
-      setHumedad(hum);
-      setError(null);
-    } catch (err) {
-      setError(err.message || 'Error de conexión');
-      setNivelAgua(0);
-    } finally {
-      setLoading(false);
-    }
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message || 'Error de conexión');
+        setNivelAgua(0);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const cargarConfiguracion = async () => {
@@ -61,13 +72,34 @@ const Tanque = () => {
     if (radioGuardado) setRadio(parseFloat(radioGuardado));
   };
 
+  const guardarConfiguracion = async () => {
+    const nuevaAlt = parseFloat(nuevaAltura);
+    const nuevoRad = parseFloat(nuevoRadio);
+
+    if (isNaN(nuevaAlt) || isNaN(nuevoRad) || nuevaAlt <= 0 || nuevoRad <= 0) {
+      Alert.alert('Error', 'Por favor ingresa valores válidos y mayores a 0.');
+      return;
+    }
+
+    await SecureStore.setItemAsync('altura', nuevaAlt.toString());
+    await SecureStore.setItemAsync('radio', nuevoRad.toString());
+    setAltura(nuevaAlt);
+    setRadio(nuevoRad);
+    setModalVisible(false);
+  };
+
   useEffect(() => {
     cargarConfiguracion();
   }, []);
 
   useEffect(() => {
     fetchStatus();
-    const interval = setInterval(fetchStatus, 3000);
+    fetchNivelAgua();
+    const interval = setInterval(() => {
+      fetchStatus();
+      fetchNivelAgua();
+    }, 3000);
+
     return () => clearInterval(interval);
   }, [altura]);
 
@@ -110,11 +142,46 @@ const Tanque = () => {
       )}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('ConfigurarTanque')}
+        onPress={() => {
+          setNuevaAltura(altura.toString());
+          setNuevoRadio(radio.toString());
+          setModalVisible(true);
+        }}
         style={globalStyles.botonPrimario}
       >
         <Text style={globalStyles.textoBoton}>Configurar Tanque</Text>
       </TouchableOpacity>
+
+      {/* MODAL */}
+      <Modal visible={modalVisible} animationType="slide" onRequestClose={() => setModalVisible(false)}>
+        <View style={globalStyles.modalContainer}>
+          <Text style={globalStyles.titulo}>Configurar Tanque</Text>
+
+          <Text style={globalStyles.texto}>Altura (cm):</Text>
+          <TextInput
+            value={nuevaAltura}
+            onChangeText={setNuevaAltura}
+            keyboardType="numeric"
+            style={globalStyles.input}
+          />
+
+          <Text style={globalStyles.texto}>Radio (cm):</Text>
+          <TextInput
+            value={nuevoRadio}
+            onChangeText={setNuevoRadio}
+            keyboardType="numeric"
+            style={globalStyles.input}
+          />
+
+          <TouchableOpacity onPress={guardarConfiguracion} style={globalStyles.botonPrimario}>
+            <Text style={globalStyles.textoBoton}>Guardar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setModalVisible(false)} style={globalStyles.botonPrimario}>
+            <Text style={globalStyles.textoBoton}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
