@@ -51,7 +51,7 @@ const Tanque = () => {
         return response.json();
       })
       .then((data) => {
-        const distancia = data.distancia;
+        const distancia = data.nivelAgua;
         const nivel = altura - distancia;
         setNivelAgua(nivel < 0 ? 0 : nivel);
         setError(null);
